@@ -1,27 +1,18 @@
-# dardevelin's Homebrew Tap
+# Homebrew Formula for ss-lib
 
-This tap contains Homebrew formulae for my projects.
+A lightweight signal-slot library for C with focus on embedded systems.
 
 ## Installation
 
 ```bash
-brew tap dardevelin/tap
-```
-
-## Available Formulae
-
-### ss-lib
-
-A lightweight signal-slot library for C with focus on embedded systems.
-
-```bash
-brew install dardevelin/tap/ss-lib
+brew tap dardevelin/ss-lib
+brew install ss-lib
 ```
 
 Or install the latest development version:
 
 ```bash
-brew install dardevelin/tap/ss-lib --HEAD
+brew install dardevelin/ss-lib/ss-lib --HEAD
 ```
 
 ## More Information
