@@ -126,7 +126,7 @@ class SsLib < Formula
     EOS
 
     system ENV.cc, "test_thread.c", "-o", "test_thread",
-           "-I#{include}", "-L#{lib}", "-lsslib_v2", "-pthread"
+           "-I#{include}", "-L#{lib}", "-lss_lib", "-pthread"
     assert_match "Thread test passed", shell_output("./test_thread")
   end
 end
