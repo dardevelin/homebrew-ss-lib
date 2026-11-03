@@ -14,14 +14,17 @@ A lightweight signal-slot library for C designed for embedded systems, game engi
 ## Installation
 
 ```bash
-brew tap dardevelin/ss-lib
-brew install ss-lib
+brew install dardevelin/ss-lib/ss-lib
 ```
+
+This taps the repository and installs in one step. Use the full name: Homebrew 7 refuses to load formulae from a third-party tap by short name (`brew install ss-lib`) until you run `brew trust dardevelin/ss-lib`.
+
+The formula has no dependencies other than CMake, which it uses to build.
 
 Or install the latest development version:
 
 ```bash
-brew install dardevelin/ss-lib/ss-lib --HEAD
+brew install --HEAD dardevelin/ss-lib/ss-lib
 ```
 
 ## Quick Start

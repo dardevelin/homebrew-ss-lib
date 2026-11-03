@@ -7,7 +7,6 @@ class SsLib < Formula
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
 
   depends_on "cmake" => :build
-  depends_on "pkgconf" => :test
 
   def install
     # The installed ss_lib.pc carries these feature definitions in its Cflags,
@@ -50,7 +49,11 @@ class SsLib < Formula
         return 0;
       }
     C
-    flags = shell_output("pkgconf --cflags --libs ss_lib").chomp.split
+    # The flags pkg-config would give, read from the installed ss_lib.pc
+    pc = (lib/"pkgconfig/ss_lib.pc").read
+    flags = pc[/^Cflags: (.*)$/, 1].gsub("${includedir}", include.to_s).split
+    flags += ["-L#{lib}", "-lss_lib"]
+    assert_includes flags, "-DSS_ENABLE_THREAD_SAFETY=1"
     system ENV.cc, "test_basic.c", "-o", "test_basic", *flags
     output = shell_output("./test_basic")
     assert_match "Value: 42", output
