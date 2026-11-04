@@ -19,7 +19,7 @@ brew install dardevelin/ss-lib/ss-lib
 
 This taps the repository and installs in one step. Use the full name: Homebrew 7 refuses to load formulae from a third-party tap by short name (`brew install ss-lib`) until you run `brew trust dardevelin/ss-lib`.
 
-The formula has no dependencies other than CMake, which it uses to build.
+The formula has no dependencies: it builds with `make` and the C compiler.
 
 Or install the latest development version:
 
@@ -67,9 +67,9 @@ target_link_libraries(your_app ss_lib::ss_lib)
 ## What Gets Installed
 
 - **Headers**: `ss_lib/ss_lib.h`, `ss_lib/ss_config.h`, and `ss_lib_single.h`
-- **Library**: shared only, `libss_lib.dylib` (macOS) / `libss_lib.so` (Linux), versioned by major version (`libss_lib.2.dylib`, `libss_lib.so.2`)
+- **Library**: shared, `libss_lib.dylib` (macOS) / `libss_lib.so` (Linux), versioned by major version (`libss_lib.2.dylib`, `libss_lib.so.2`), and static, `libss_lib.a`
 - **pkg-config**: `ss_lib.pc`
-- **CMake package**: `ss_lib::ss_lib`
+- **CMake package**: `ss_lib::ss_lib` (`find_package(ss_lib 2)`)
 - **Documentation**: README, CHANGELOG, and `docs/` in `$(brew --prefix)/share/doc/ss-lib`
 
 ## Using the Single Header Version
@@ -90,6 +90,7 @@ The formula builds with:
 - ISR-safe emission: disabled
 - Memory: dynamic (heap)
 - Tests and examples: not built
+- `pkg-config` and CMake's `ss_lib::ss_lib` both pass these settings to your program
 
 For static memory, ISR support or other options, build from source; see the [Configuration Guide](https://github.com/dardevelin/ss_lib/blob/main/docs/configuration.md).
 

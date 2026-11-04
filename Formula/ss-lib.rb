@@ -1,26 +1,20 @@
 class SsLib < Formula
   desc "Signal-slot library for C, for embedded systems and games"
   homepage "https://github.com/dardevelin/ss_lib"
-  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.0/ss_lib-v2.2.0.tar.gz"
-  sha256 "b1568f1c51f7addf9fc8e888eeb8112268015e51fe15da7f7b0423bb644690a0"
+  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.1/ss_lib-v2.2.1.tar.gz"
+  sha256 "a06fb160379776010548443072dc888042abf79d1c746814e7bd15eda3eb532c"
   license "MIT"
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
 
-  depends_on "cmake" => :build
-
   def install
-    # The installed ss_lib.pc carries these feature definitions in its Cflags,
-    # so programs built with `pkg-config --cflags` match the library.
-    args = %w[
-      -DSS_BUILD_SHARED=ON
-      -DSS_BUILD_TESTS=OFF
-      -DSS_BUILD_EXAMPLES=OFF
-      -DSS_ENABLE_THREAD_SAFETY=ON
-      -DSS_ENABLE_PERFORMANCE_STATS=ON
+    # The installed ss_lib.pc and CMake package (ss_lib::ss_lib) carry these
+    # feature definitions, so programs built with either match the library.
+    features = %w[
+      -DSS_ENABLE_THREAD_SAFETY=1
+      -DSS_ENABLE_PERFORMANCE_STATS=1
+      -DSS_ENABLE_ISR_SAFE=0
     ]
-    system "cmake", "-S", ".", "-B", "build", *args, *std_cmake_args
-    system "cmake", "--build", "build"
-    system "cmake", "--install", "build"
+    system "make", "install", "PREFIX=#{prefix}", "FEATURES=#{features.join(" ")}"
 
     # Pre-generated in the release; a HEAD build generates it
     system "./create_single_header.sh", "include/ss_lib_single.h" if build.head?
@@ -30,6 +24,11 @@ class SsLib < Formula
   end
 
   test do
+    # find_package(ss_lib 2) works from either install; make writes these
+    %w[ss_libConfig ss_libConfigVersion ss_libTargets].each do |f|
+      assert_path_exists lib/"cmake/ss_lib/#{f}.cmake"
+    end
+
     (testpath/"test_basic.c").write <<~C
       #include <ss_lib.h>
       #include <stdio.h>
