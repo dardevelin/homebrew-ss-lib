@@ -12,6 +12,14 @@ class SsLibAT2 < Formula
   sha256 "e69d4dc152869312e845d21ccc9df064563e911a067ce58cefbf3cd5d7bbadda"
   license "MIT"
 
+  bottle do
+    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib@2-2.2.4"
+    sha256 cellar: :any, arm64_tahoe:   "c57853610d47c18346a830d857d679b21cf5c6dec827745e3fd908ddc915349c"
+    sha256 cellar: :any, arm64_sequoia: "70a49318133f2ea04aa4227b9c0a43b2389a0d2b59350733299ca6ddfb0fe080"
+    sha256 cellar: :any, arm64_linux:   "afb5c01dc234661d33b9d83b43ebf7095c66b674a00b620d87883ca7255ef436"
+    sha256 cellar: :any, x86_64_linux:  "1b8649e20f009707f1fc5560e8725d33f4ad35019dcaea6a4e32444d7a709649"
+  end
+
   # Not :versioned_formula: Homebrew links a formula with that reason when
   # ss-lib is not installed, and ss-lib then fails to link over it
   keg_only "it installs the same headers, libss_lib names and packages as ss-lib"
