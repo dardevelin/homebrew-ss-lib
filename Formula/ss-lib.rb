@@ -1,8 +1,8 @@
 class SsLib < Formula
   desc "Signal-slot library for C, for embedded systems and games"
   homepage "https://github.com/dardevelin/ss_lib"
-  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.1/ss_lib-v2.2.1.tar.gz"
-  sha256 "a06fb160379776010548443072dc888042abf79d1c746814e7bd15eda3eb532c"
+  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.2/ss_lib-v2.2.2.tar.gz"
+  sha256 "a97757a13f8c5672ae07a8565d76e8a257ecd1926334baa9d4a1a431d773ebe9"
   license "MIT"
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
 
