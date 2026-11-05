@@ -81,9 +81,9 @@ jobs:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'
 
-      # What `brew install` does on a user's machine: a source build for the
-      # runner's own CPU (-march=native), which the bottle build above does
-      # not cover
+      # What `brew install --build-from-source` does on a user's machine (and
+      # `brew install` where there is no bottle): a build for the runner's
+      # own CPU (-march=native), which the bottle build above does not cover
       - name: Install from source, test and audit
         run: |
           if brew list --formula dardevelin/ss-lib/ss-lib > /dev/null 2>&1; then

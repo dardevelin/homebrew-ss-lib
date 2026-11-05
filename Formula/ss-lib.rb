@@ -1,3 +1,7 @@
+# Bottles: tests.yml (`brew test-bot`) builds them for each pull request that
+# changes this file, and publish.yml (`brew pr-pull`) uploads them to the
+# tap's GitHub Releases and commits the `bottle do` block: don't edit that
+# block by hand.
 class SsLib < Formula
   desc "Signal-slot library for C, for embedded systems and games"
   homepage "https://github.com/dardevelin/ss_lib"

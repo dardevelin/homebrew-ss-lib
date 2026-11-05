@@ -19,9 +19,13 @@ brew install dardevelin/ss-lib/ss-lib
 
 This taps the repository and installs in one step. Use the full name: Homebrew 7 refuses to load formulae from a third-party tap by short name (`brew install ss-lib`) until you run `brew trust dardevelin/ss-lib`.
 
-The formula has no dependencies: it builds with `make` and the C compiler.
+On macOS 15 and 26 (Apple silicon) and on Linux (x86_64 and arm64) this pours a bottle, a prebuilt binary package, downloaded from this tap's [releases](https://github.com/dardevelin/homebrew-ss-lib/releases). Elsewhere, or with `--build-from-source`, Homebrew builds it with `make` and the C compiler; the formula has no dependencies:
 
-CI installs, tests and audits the formula on macOS and on Linux (x86_64 and arm64) for every pull request and every week: as a bottle, from source as `brew install` builds it, and from SS-Lib's main branch (`--HEAD`).
+```bash
+brew install --build-from-source dardevelin/ss-lib/ss-lib
+```
+
+CI builds, tests and audits a bottle on each of those four platforms for every pull request. For every pull request, every change to main and every week, it also installs, tests and audits the formula built from source, and installs and tests SS-Lib's main branch (`--HEAD`).
 
 Or install the latest development version:
 
