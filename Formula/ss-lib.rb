@@ -5,19 +5,10 @@
 class SsLib < Formula
   desc "Signal-slot library for C, for embedded systems and games"
   homepage "https://github.com/dardevelin/ss_lib"
-  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.3/ss_lib-v2.2.3.tar.gz"
-  sha256 "d5eb20598e2cba6d27b8a9d62a80cbc9f12c5d4d0aad5b1d71943a5b4e29036a"
+  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.4/ss_lib-v2.2.4.tar.gz"
+  sha256 "e69d4dc152869312e845d21ccc9df064563e911a067ce58cefbf3cd5d7bbadda"
   license "MIT"
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
-
-  bottle do
-    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib-2.2.3"
-    rebuild 1
-    sha256 cellar: :any, arm64_tahoe:   "0d5e2bc3248dc923e42c4b51b5589b8771f0d8893e2ec62ef9004b6957be8079"
-    sha256 cellar: :any, arm64_sequoia: "1448f0810fd4a71415799c8361d8d4e02d692643142f2ab1fd44134907195102"
-    sha256 cellar: :any, arm64_linux:   "b0db33d3593521828520e614ac65134b83d06c796efb58c4d77d6fd31f73c8d3"
-    sha256 cellar: :any, x86_64_linux:  "9396efa444a6238b4cc3a9b90bcea8d829ec89914140dcb7af5536ec7d660c59"
-  end
 
   def install
     # The installed ss_lib.pc and CMake package (ss_lib::ss_lib) carry these
