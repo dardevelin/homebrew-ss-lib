@@ -10,6 +10,15 @@ class SsLib < Formula
   license "MIT"
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
 
+  bottle do
+    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib-2.2.3"
+    rebuild 1
+    sha256 cellar: :any, arm64_tahoe:   "0d5e2bc3248dc923e42c4b51b5589b8771f0d8893e2ec62ef9004b6957be8079"
+    sha256 cellar: :any, arm64_sequoia: "1448f0810fd4a71415799c8361d8d4e02d692643142f2ab1fd44134907195102"
+    sha256 cellar: :any, arm64_linux:   "b0db33d3593521828520e614ac65134b83d06c796efb58c4d77d6fd31f73c8d3"
+    sha256 cellar: :any, x86_64_linux:  "9396efa444a6238b4cc3a9b90bcea8d829ec89914140dcb7af5536ec7d660c59"
+  end
+
   def install
     # The installed ss_lib.pc and CMake package (ss_lib::ss_lib) carry these
     # feature definitions, so programs built with either match the library.
