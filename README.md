@@ -21,6 +21,8 @@ This taps the repository and installs in one step. Use the full name: Homebrew 7
 
 The formula has no dependencies: it builds with `make` and the C compiler.
 
+CI installs, tests and audits the formula on macOS and on Linux (x86_64 and arm64) for every pull request and every week: as a bottle, from source as `brew install` builds it, and from SS-Lib's main branch (`--HEAD`).
+
 Or install the latest development version:
 
 ```bash
