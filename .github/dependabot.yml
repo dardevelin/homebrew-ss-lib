@@ -5,3 +5,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      # setup-homebrew, git-user-config and git-try-push come from one
+      # repository: update them together so both workflows pin one release
+      homebrew-actions:
+        patterns:
+          - "Homebrew/actions/*"
