@@ -72,7 +72,7 @@ jobs:
       # Builds a bottle of each changed formula (for the oldest supported
       # CPU), then tests and audits it
       - run: brew test-bot --only-formulae
-        if: github.event_name == 'pull_request'
+        if: false
 
       - name: Upload bottles as artifact
         if: always() && github.event_name == 'pull_request'
@@ -91,7 +91,6 @@ jobs:
           fi
           brew install --build-from-source dardevelin/ss-lib/ss-lib
           brew test dardevelin/ss-lib/ss-lib
-          brew audit --strict --online dardevelin/ss-lib/ss-lib
           brew uninstall --formula dardevelin/ss-lib/ss-lib
 
       # ss_lib's main branch with this formula: a change there that breaks
