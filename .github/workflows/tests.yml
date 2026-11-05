@@ -83,18 +83,23 @@ jobs:
 
       # What `brew install --build-from-source` does on a user's machine (and
       # `brew install` where there is no bottle): a build for the runner's
-      # own CPU (-march=native), which the bottle build above does not cover
+      # own CPU (-march=native), which the bottle build above does not cover.
+      # Each formula in turn: ss-lib@2 is keg-only, but both install the
+      # same files, so only one is installed at a time here
       - name: Install from source, test and audit
         run: |
-          if brew list --formula dardevelin/ss-lib/ss-lib > /dev/null 2>&1; then
-            brew uninstall --formula dardevelin/ss-lib/ss-lib
-          fi
-          brew install --build-from-source dardevelin/ss-lib/ss-lib
-          brew test dardevelin/ss-lib/ss-lib
-          brew audit --strict --online dardevelin/ss-lib/ss-lib
-          brew uninstall --formula dardevelin/ss-lib/ss-lib
+          for formula in ss-lib ss-lib@2; do
+            f="dardevelin/ss-lib/$formula"
+            if brew list --formula "$f" > /dev/null 2>&1; then
+              brew uninstall --formula "$f"
+            fi
+            brew install --build-from-source "$f"
+            brew test "$f"
+            brew audit --strict --online "$f"
+            brew uninstall --formula "$f"
+          done
 
-      # ss_lib's main branch with this formula: a change there that breaks
+      # ss_lib's main branch with the ss-lib formula: a change there that breaks
       # the formula fails here before it is released
       - name: Install the development version (--HEAD) and test it
         run: |
