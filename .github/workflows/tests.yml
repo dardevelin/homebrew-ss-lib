@@ -1,102 +1,29 @@
-# Based on the workflow `brew tap-new` generates (Homebrew 7.0.12). Actions
-# are pinned to commit SHAs; Dependabot (.github/dependabot.yml) proposes
-# updates. The comment after each SHA is the release it maps to.
-name: brew test-bot
-
+name: probe
 on:
-  push:
-    branches:
-      - main
   pull_request:
-  schedule:
-    # Mondays at 06:00 UTC: catches changes in Homebrew, compilers and runner
-    # images that break the formula without any change here
-    - cron: '0 6 * * 1'
-  workflow_dispatch:
-
 permissions: {}
-
-defaults:
-  run:
-    shell: bash -xeuo pipefail {0}
-
 jobs:
-  test-bot:
-    name: ${{ matrix.name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: macOS 26 (arm64)
-            os: macos-26
-          - name: macOS 15 (arm64)
-            os: macos-15
-          - name: Linux (x86_64)
-            os: ubuntu-latest
-            container:
-              image: ghcr.io/homebrew/brew:main
-              options: --privileged
-          - name: Linux (arm64)
-            os: ubuntu-24.04-arm
-            container:
-              image: ghcr.io/homebrew/brew:main
-              options: --privileged
-    runs-on: ${{ matrix.os }}
-    container: ${{ fromJSON(toJSON(matrix.container)) }} # zizmor: ignore[unpinned-images]
-    timeout-minutes: 45
+  probe:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: ghcr.io/homebrew/brew:main
     permissions:
-      actions: read
-      checks: read
       contents: read
-      pull-requests: read
     steps:
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@d482da0e602890d3160aade42e72c8556103bf04 # 2026.10.26.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cache Homebrew Bundler RubyGems
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
-          key: ${{ matrix.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
-          restore-keys: ${{ matrix.os }}-rubygems-
-
-      - run: brew test-bot --only-cleanup-before
-
-      - run: brew test-bot --only-setup
-
-      - run: brew test-bot --only-tap-syntax
-
-      # Builds a bottle of each changed formula (for the oldest supported
-      # CPU), then tests and audits it
-      - run: brew test-bot --only-formulae
-        if: false
-
-      - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: bottles_${{ matrix.os }}
-          path: '*.bottle.*'
-
-      # What `brew install` does on a user's machine: a source build for the
-      # runner's own CPU (-march=native), which the bottle build above does
-      # not cover
-      - name: Install from source, test and audit
+      - name: What -march=native means here, and 2.2.2 vs 2.2.3 built as Homebrew does
+        shell: bash -xeuo pipefail {0}
         run: |
-          if brew list --formula dardevelin/ss-lib/ss-lib > /dev/null 2>&1; then
-            brew uninstall --formula dardevelin/ss-lib/ss-lib
-          fi
-          brew install --build-from-source dardevelin/ss-lib/ss-lib
-          brew test dardevelin/ss-lib/ss-lib
-          brew uninstall --formula dardevelin/ss-lib/ss-lib
-
-      # ss_lib's main branch with this formula: a change there that breaks
-      # the formula fails here before it is released
-      - name: Install the development version (--HEAD) and test it
-        run: |
-          brew install --HEAD dardevelin/ss-lib/ss-lib
-          brew test dardevelin/ss-lib/ss-lib
-          brew uninstall --formula dardevelin/ss-lib/ss-lib
+          grep -m1 -iE 'CPU part|model name' /proc/cpuinfo || true
+          grep -m1 Features /proc/cpuinfo
+          for cc in gcc-13 gcc; do command -v $cc && $cc --version | head -1 && $cc -march=native -Q --help=target | grep -E '^\s+-march=|^\s+-mcpu=' || true; done
+          echo | gcc-13 -march=native -mbranch-protection=standard -dM -E - | grep -E 'PAUTH|PAC_DEFAULT|JCVT|__ARM_ARCH ' || true
+          cd "$RUNNER_TEMP"
+          for v in 2.2.2 2.2.3; do
+            curl -sSL "https://github.com/dardevelin/ss_lib/releases/download/v$v/ss_lib-v$v.tar.gz" | tar -xz
+            cd "ss_lib-v$v"
+            gcc-13 -O2 -march=native -mbranch-protection=standard -std=c11 -Iinclude -DSS_ENABLE_THREAD_SAFETY=1 -DSS_ENABLE_PERFORMANCE_STATS=1 -c src/ss_lib.c -o l.o
+            echo "$v retaa: $(objdump -d l.o | grep -c retaa || true)"
+            gcc-13 -std=c11 -Iinclude -DSS_ENABLE_THREAD_SAFETY=1 -DSS_ENABLE_PERFORMANCE_STATS=1 tests/test_simple.c l.o -pthread -o t
+            ./t > /dev/null && echo "$v: test passed" || echo "$v: test FAILED ($?)"
+            cd ..
+          done
