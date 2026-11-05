@@ -25,13 +25,30 @@ On macOS 15 and 26 (Apple silicon) and on Linux (x86_64 and arm64) this pours a 
 brew install --build-from-source dardevelin/ss-lib/ss-lib
 ```
 
-CI builds, tests and audits a bottle on each of those four platforms for every pull request. For every pull request, every change to main and every week, it also installs, tests and audits the formula built from source, and installs and tests SS-Lib's main branch (`--HEAD`).
+CI builds, tests and audits a bottle on each of those four platforms for every pull request that changes a formula. For every pull request, every change to main and every week, it also installs, tests and audits each formula built from source, and installs and tests SS-Lib's main branch (`--HEAD`).
 
 Or install the latest development version:
 
 ```bash
 brew install --HEAD dardevelin/ss-lib/ss-lib
 ```
+
+### SS-Lib 2.2.x (`ss-lib@2`)
+
+For programs not yet migrated to SS-Lib 3.0, `ss-lib@2` installs the latest 2.2.x, which still receives security fixes:
+
+```bash
+brew install dardevelin/ss-lib/ss-lib@2
+```
+
+It is keg-only: it installs the same headers, `libss_lib` names and packages as `ss-lib`, so Homebrew does not link it into its prefix. Point pkg-config or CMake at it:
+
+```bash
+export PKG_CONFIG_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)/lib/pkgconfig"
+cmake -DCMAKE_PREFIX_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)" ...   # find_package(ss_lib 2)
+```
+
+It has bottles for the same platforms as `ss-lib`.
 
 ## Quick Start
 
