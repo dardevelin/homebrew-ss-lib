@@ -35,18 +35,20 @@ brew install --HEAD dardevelin/ss-lib/ss-lib
 
 ### SS-Lib 2.2.x (`ss-lib@2`)
 
-For programs not yet migrated to SS-Lib 3.0, `ss-lib@2` installs the latest 2.2.x, which still receives security fixes:
+For programs not yet migrated to SS-Lib 3.0 (see the [migration guide](https://github.com/dardevelin/ss_lib/blob/main/docs/migration-3.0.md)), `ss-lib@2` installs the latest 2.2.x, which still receives security fixes:
 
 ```bash
 brew install dardevelin/ss-lib/ss-lib@2
 ```
 
-It is keg-only: it installs the same headers, `libss_lib` names and packages as `ss-lib`, so Homebrew does not link it into its prefix. Point pkg-config or CMake at it:
+It is keg-only: it installs the same headers, `libss_lib` names and packages as `ss-lib`, so Homebrew never links it into its prefix, and both can be installed at once. Point pkg-config or CMake at it:
 
 ```bash
 export PKG_CONFIG_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)/lib/pkgconfig"
 cmake -DCMAKE_PREFIX_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)" ...   # find_package(ss_lib 2)
 ```
+
+On Linux, a program linked against its shared library also needs `-Wl,-rpath,$(brew --prefix dardevelin/ss-lib/ss-lib@2)/lib` to find it at run time.
 
 It has bottles for the same platforms as `ss-lib`.
 
@@ -63,13 +65,14 @@ void on_button_click(const ss_data_t* data, void* user_data) {
 }
 
 int main(void) {
-    /* ss_init_abi() checks that this program and the library were built
+    ss_bus_t* bus = NULL;
+    /* ss_bus_create() checks that this program and the library were built
      * with the same configuration */
-    if (ss_init_abi(SS_ABI_TAG) != SS_OK) return 1;
-    ss_signal_register("button_click");
-    ss_connect("button_click", on_button_click, NULL);
-    ss_emit_void("button_click");
-    ss_cleanup();
+    if (ss_bus_create(&bus, 0) != SS_OK) return 1;
+    ss_signal_register(bus, "button_click");
+    ss_connect(bus, "button_click", on_button_click, NULL);
+    ss_emit_void(bus, "button_click");
+    ss_bus_destroy(bus);
     return 0;
 }
 ```
@@ -83,16 +86,16 @@ cc example.c -o example $(pkg-config --cflags --libs ss_lib)
 Or with CMake:
 
 ```cmake
-find_package(ss_lib 2 REQUIRED)
+find_package(ss_lib 3 REQUIRED)
 target_link_libraries(your_app ss_lib::ss_lib)
 ```
 
 ## What Gets Installed
 
 - **Headers**: `ss_lib/ss_lib.h`, `ss_lib/ss_config.h`, and `ss_lib_single.h`
-- **Library**: shared, `libss_lib.dylib` (macOS) / `libss_lib.so` (Linux), versioned by major version (`libss_lib.2.dylib`, `libss_lib.so.2`), and static, `libss_lib.a`
+- **Library**: shared, `libss_lib.dylib` (macOS) / `libss_lib.so` (Linux), versioned by major version (`libss_lib.3.dylib`, `libss_lib.so.3`), and static, `libss_lib.a`
 - **pkg-config**: `ss_lib.pc`
-- **CMake package**: `ss_lib::ss_lib` (`find_package(ss_lib 2)`)
+- **CMake package**: `ss_lib::ss_lib` (`find_package(ss_lib 3)`)
 - **Documentation**: README, CHANGELOG, and `docs/` in `$(brew --prefix)/share/doc/ss-lib`
 
 ## Using the Single Header Version
@@ -108,7 +111,7 @@ The formula also installs a single-header version, which compiles the library in
 ## Build Options
 
 The formula builds with:
-- Thread safety: enabled (turn it on at runtime with `ss_set_thread_safe(1)`)
+- Thread safety: enabled (turn it on per bus with `ss_bus_create(&bus, SS_BUS_THREAD_SAFE)`)
 - Performance stats: enabled
 - ISR-safe emission: disabled
 - Memory: dynamic (heap)
