@@ -33,24 +33,17 @@ Or install the latest development version:
 brew install --HEAD dardevelin/ss-lib/ss-lib
 ```
 
-### SS-Lib 2.2.x (`ss-lib@2`)
+### SS-Lib 2.x (`ss-lib@2`, deprecated)
 
-For programs not yet migrated to SS-Lib 3.0 (see the [migration guide](https://github.com/dardevelin/ss_lib/blob/main/docs/migration-3.0.md)), `ss-lib@2` installs the latest 2.2.x, which still receives security fixes:
+`ss-lib@2` installs 2.2.5, the last 2.x release. 2.x is no longer maintained and the formula gets no further updates: migrate to SS-Lib 3.0 with the [migration guide](https://github.com/dardevelin/ss_lib/blob/main/docs/migration-3.0.md) and install `ss-lib`. Until then it is keg-only (it installs the same headers, `libss_lib` names and packages as `ss-lib`), so point pkg-config or CMake at it:
 
 ```bash
 brew install dardevelin/ss-lib/ss-lib@2
-```
-
-It is keg-only: it installs the same headers, `libss_lib` names and packages as `ss-lib`, so Homebrew never links it into its prefix, and both can be installed at once. Point pkg-config or CMake at it:
-
-```bash
 export PKG_CONFIG_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)/lib/pkgconfig"
 cmake -DCMAKE_PREFIX_PATH="$(brew --prefix dardevelin/ss-lib/ss-lib@2)" ...   # find_package(ss_lib 2)
 ```
 
 On Linux, a program linked against its shared library also needs `-Wl,-rpath,$(brew --prefix dardevelin/ss-lib/ss-lib@2)/lib` to find it at run time.
-
-It has bottles for the same platforms as `ss-lib`.
 
 ## Quick Start
 

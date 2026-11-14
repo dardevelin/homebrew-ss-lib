@@ -1,5 +1,5 @@
-# SS_Lib 2.2.x, for programs not yet migrated to 3.0. 2.2.x receives security
-# fixes on ss_lib's release/2.x branch.
+# SS_Lib 2.2.5, the last 2.x release, for programs not yet migrated to 3.0.
+# 2.x is no longer maintained: this formula is deprecated and gets no updates.
 #
 # Bottles: tests.yml (`brew test-bot`) builds them for each pull request that
 # changes this file, and publish.yml (`brew pr-pull`) uploads them to the
@@ -23,6 +23,9 @@ class SsLibAT2 < Formula
   # Not :versioned_formula: Homebrew links a formula with that reason when
   # ss-lib is not installed, and ss-lib then fails to link over it
   keg_only "it installs the same headers, libss_lib names and packages as ss-lib"
+
+  deprecate! date: "2026-11-14", because: "is no longer maintained; migrate to ss-lib (3.x)",
+             replacement_formula: "ss-lib"
 
   def install
     # The installed ss_lib.pc and CMake package (ss_lib::ss_lib) carry these
