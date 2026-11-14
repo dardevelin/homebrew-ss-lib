@@ -8,8 +8,8 @@
 class SsLibAT2 < Formula
   desc "Signal-slot library for C, for embedded systems and games"
   homepage "https://github.com/dardevelin/ss_lib"
-  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.4/ss_lib-v2.2.4.tar.gz"
-  sha256 "e69d4dc152869312e845d21ccc9df064563e911a067ce58cefbf3cd5d7bbadda"
+  url "https://github.com/dardevelin/ss_lib/releases/download/v2.2.5/ss_lib-v2.2.5.tar.gz"
+  sha256 "7cb0f6fa1de5b51cc77b105b8c0b0baacc26e6afdbfddce554147fb6fede3c8e"
   license "MIT"
 
   bottle do
