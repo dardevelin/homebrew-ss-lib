@@ -11,11 +11,11 @@ class SsLib < Formula
   head "https://github.com/dardevelin/ss_lib.git", branch: "main"
 
   bottle do
-    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib-3.0.0"
-    sha256 cellar: :any, arm64_tahoe:   "1165c6094d990059defb936db840f90fbbc90ff28a605d1b73113fefc5cb6d71"
-    sha256 cellar: :any, arm64_sequoia: "d327c9cd435445074f61c145b939f2bdc33090ec3f7cab71ce5efc6b0b31cad2"
-    sha256 cellar: :any, arm64_linux:   "c0e5bb2180f1e084d0cd6c1ccf70cc1e31e0cfab79dae06c20b6fed44a6c4533"
-    sha256 cellar: :any, x86_64_linux:  "80831a9a1ff49abe4101ced0d2866de7c09fcabc6b29ed629b77facab00cced4"
+    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib-3.0.1"
+    sha256 cellar: :any, arm64_tahoe:   "f704fb131e04287aee621cd3c12940f5a516e7a18cc20ca8ec288e6cfc633db8"
+    sha256 cellar: :any, arm64_sequoia: "111504a0873be8fb6f90e37fa141768968f86ce1a15b70ca53108097a1d0740d"
+    sha256 cellar: :any, arm64_linux:   "49578ca33f3f00d51ec306664154e9a277053e44a30bcd3b1dbfcecfac38166e"
+    sha256 cellar: :any, x86_64_linux:  "2944fdac77cd566225e5db6784568795d0b58f1f3cb176cba960b6b0a43ffe0d"
   end
 
   def install
