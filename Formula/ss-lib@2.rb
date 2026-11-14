@@ -13,11 +13,11 @@ class SsLibAT2 < Formula
   license "MIT"
 
   bottle do
-    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib@2-2.2.4"
-    sha256 cellar: :any, arm64_tahoe:   "c57853610d47c18346a830d857d679b21cf5c6dec827745e3fd908ddc915349c"
-    sha256 cellar: :any, arm64_sequoia: "70a49318133f2ea04aa4227b9c0a43b2389a0d2b59350733299ca6ddfb0fe080"
-    sha256 cellar: :any, arm64_linux:   "afb5c01dc234661d33b9d83b43ebf7095c66b674a00b620d87883ca7255ef436"
-    sha256 cellar: :any, x86_64_linux:  "1b8649e20f009707f1fc5560e8725d33f4ad35019dcaea6a4e32444d7a709649"
+    root_url "https://github.com/dardevelin/homebrew-ss-lib/releases/download/ss-lib@2-2.2.5"
+    sha256 cellar: :any, arm64_tahoe:   "7edfe6f6ea82a7f76d3102f0f37332ece68b8626d9483795496694e5e4366de2"
+    sha256 cellar: :any, arm64_sequoia: "5876757c802b1b1a5f7a2e8dd081a6b39f2a3d7bef2a5d5a8e2e0359f065b0d2"
+    sha256 cellar: :any, arm64_linux:   "8535757d73a5f4fbc398a1b9157632fbee0cb08ff98524b909cd42261402a059"
+    sha256 cellar: :any, x86_64_linux:  "af60a947b80e68b308953599cd91492cc7aa783c34b418b88c0c87fc7469ac2a"
   end
 
   # Not :versioned_formula: Homebrew links a formula with that reason when
